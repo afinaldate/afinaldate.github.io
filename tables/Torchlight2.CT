@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="28">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>"[Game version: 1.25.5.6 :: x32 Steam]"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>37</ID>
+      <Description>"Infinite Health"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(infHealth,Torchlight2.exe,D9 86 60 05 00 00 8B 90 A8 02 00 00 D9) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  fld dword ptr [esi+00000560]
+  mov [esi+00000560], (Float)9999
+  jmp return
+
+infHealth:
+  jmp code
+  nop
+return:
+registersymbol(infHealth)
+
+[DISABLE]
+
+infHealth:
+  db D9 86 60 05 00 00
+
+unregistersymbol(infHealth)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>39</ID>
+      <Description>"Infinite Mana"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(infMana,Torchlight2.exe,D9 96 84 05 00 00 D9) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  fst dword ptr [esi+00000584]
+  mov [esi+00000584], (Float)9999
+  jmp return
+
+infMana:
+  jmp code
+  nop
+return:
+registersymbol(infMana)
+
+[DISABLE]
+
+infMana:
+  db D9 96 84 05 00 00
+
+unregistersymbol(infMana)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>70</ID>
+      <Description>"Always Charged"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(charge,Torchlight2.exe,D9 9E 48 0C 00 00) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  fstp dword ptr [esi+00000C48]
+  mov [esi+00000C48], (Float)100
+  jmp return
+
+charge:
+  jmp newmem
+  nop
+return:
+registersymbol(charge)
+
+[DISABLE]
+
+charge:
+  db D9 9E 48 0C 00 00
+
+unregistersymbol(charge)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>26</ID>
+      <Description>"Max Stack Size"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>//Will stack every item available if it can be stacked. Weapons and the like are not stackable.
+//I suggest using this only when needed as it can cause wonky issues.
+//Activate it once and disable. Some items may require picking them up and dropping to take effect.
+
+[ENABLE]
+
+aobscanmodule(stackSizes,Torchlight2.exe,75 38 8B 46 1C 3B 7E 24 73 03 8D 04 B8 8B 08 8B 51 34 83 BA 78 02 00 00 00) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cmp dword ptr [edx+00000278],00
+  push ebx
+  mov ebx, [edx+0000027C]
+  mov [edx+00000278], ebx
+  pop ebx
+  jmp return
+
+stackSizes+12:
+  jmp code
+  nop
+  nop
+return:
+registersymbol(stackSizes)
+
+[DISABLE]
+
+stackSizes+12:
+  db 83 BA 78 02 00 00 00
+
+unregistersymbol(stackSizes)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>43</ID>
+      <Description>"Unlimited Fishing Holes"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>//Sets all wild fishing holes to 99 allowing infinite use.
+//Havent tested with dynamite.
+
+[ENABLE]
+
+
+aobscanmodule(infFishing,Torchlight2.exe,89 46 6C 8B 86 9C 00 00 00) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [esi+6C],eax
+  mov eax,[esi+0000009C]
+  mov [esi+6C], (Int)99
+  jmp return
+
+infFishing:
+  jmp code
+  nop
+  nop
+  nop
+  nop
+return:
+registersymbol(infFishing)
+
+[DISABLE]
+
+infFishing:
+  db 89 46 6C 8B 86 9C 00 00 00
+
+unregistersymbol(infFishing)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>40</ID>
+      <Description>"Level 100"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>//Kill a monster and you will instantly rise to level 100
+
+[ENABLE]
+aobscanmodule(InfEXP,Torchlight2.exe,01 9E 94 05 00 00) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  add [esi+00000594],ebx
+  mov [esi+00000594], (Int)26551000
+  jmp return
+
+InfEXP:
+  jmp code
+  nop
+return:
+registersymbol(InfEXP)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+InfEXP:
+  db 01 9E 94 05 00 00
+
+unregistersymbol(InfEXP)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>62</ID>
+      <Description>"Max Skills"</Description>
+      <LastState/>
+      <Color>FF0000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>//Purchase a skill to max that skill.
+
+[ENABLE]
+
+
+aobscanmodule(maxSkills,Torchlight2.exe,89 96 CC 00 00 00 8B 8E) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [esi+000000CC],edx
+  mov [esi+000000CC], (Int)15
+  jmp return
+
+maxSkills:
+  jmp code
+  nop
+return:
+registersymbol(maxSkills)
+
+[DISABLE]
+
+maxSkills:
+  db 89 96 CC 00 00 00
+
+unregistersymbol(maxSkills)
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>66</ID>
+      <Description>"[Item]"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>8000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(itemsaob,Torchlight2.exe,83 79 0C 01 7E 1A) // should be unique
+alloc(newmem,$1000)
+globalalloc(items,4)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cmp dword ptr [ecx+0C],01
+  mov [items],ecx
+  jle Torchlight2.exe+1845E3
+  jmp return
+
+itemsaob:
+  jmp newmem
+  nop
+return:
+registersymbol(itemsaob)
+
+[DISABLE]
+
+itemsaob:
+  db 83 79 0C 01 7E 1A
+
+unregistersymbol(itemsaob)
+dealloc(newmem)
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>67</ID>
+          <Description>"Current Amount"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[items]+0C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>68</ID>
+          <Description>"Max Stack"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[items]+10</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"[Player]"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>8000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>//Sometimes this needs to be toggled off and back on. Player HP sometimes shares with pet HP.
+
+[ENABLE]
+aobscanmodule(pullstats,Torchlight2.exe,D9 81 60 05 00 00 83) // should be unique
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+globalalloc(_player,4)
+
+newmem:
+
+code:
+  fld dword ptr [ecx+00000560]
+  mov [_player],ecx
+  jmp return
+
+pullstats:
+  jmp code
+  nop
+return:
+registersymbol(pullstats)
+
+[DISABLE]
+
+pullstats:
+  db D9 81 60 05 00 00
+
+unregistersymbol(pullstats)
+dealloc(newmem)
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>72</ID>
+          <Description>"[Stats]"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Value="" RealAddress="00000000"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Strength"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+578</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Dexterity"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+574</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"Focus"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+580</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"Vitality"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+57C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"Stat Points"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+5A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"Skill Points"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[_player]+5AC</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"Health"</Description>
+          <VariableType>Float</VariableType>
+          <Address>[_player]+560</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Mana"</Description>
+          <VariableType>Float</VariableType>
+          <Address>[_player]+584</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>60</ID>
+          <Description>"Charge Bar"</Description>
+          <VariableType>Float</VariableType>
+          <Address>[_player]+C48</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>17</ID>
+          <Description>"Player Level"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[_player]+110</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"Experience"</Description>
+          <ShowAsSigned>1</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[_player]+594</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"Fame"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[_player]+598</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>11</ID>
+          <Description>"Gold"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[_player]+590</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>71</ID>
+      <Description>""</Description>
+      <Options moHideChildren="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>69</ID>
+          <Description>"[Read Table Extras]"</Description>
+          <LastState Value="" RealAddress="00000000"/>
+          <Color>C0C0C0</Color>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>73</ID>
+      <Description>"[Created by Chiados :: https://afinaldate.github.io/]"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>808080</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols>
+    <SymbolEntry>
+      <Name>_player</Name>
+      <Address>0D130000</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_core</Name>
+      <Address>05E50030</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_world</Name>
+      <Address>1C500010</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>spells</Name>
+      <Address>1C500020</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_item</Name>
+      <Address>1C500030</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_misc</Name>
+      <Address>05E50010</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>00000000</Name>
+      <Address>05E50020</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_fishy</Name>
+      <Address>05E50040</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_pettimer</Name>
+      <Address>05E40040</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_skills</Name>
+      <Address>05E70010</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_outlander</Name>
+      <Address>05E40000</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_lore</Name>
+      <Address>05E40010</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>_sigil</Name>
+      <Address>05E40030</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>lore</Name>
+      <Address>006BB12C</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>outlander</Name>
+      <Address>006CAF8C</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>sigil</Name>
+      <Address>006CAEE2</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>items</Name>
+      <Address>0D130010</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>corestat</Name>
+      <Address>10E50020</Address>
+    </SymbolEntry>
+  </UserdefinedSymbols>
+  <Comments>https://afinaldate.github.io/</Comments>
+</CheatTable>
