@@ -133,10 +133,10 @@ hr { display: none; }
 
 #logo {
 	width: 900px;
-	height: 400px;
+	height: 300px;
 	margin: 0 auto;
 	padding-bottom: 15px;
-	background: url("images/headerv3.png") no-repeat left top;
+	background: url("images/RetributionV4.png") no-repeat left top;
 }
 
 #logo h1, #logo p {
